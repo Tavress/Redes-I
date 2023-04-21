@@ -3,6 +3,7 @@ import sys
 import time
 import random
 
+
 ##
 # Funcoes uteis
 ##
@@ -91,7 +92,7 @@ def novoTabuleiro(dim):
     # Varre todas as pecas que serao colocadas no 
     # tabuleiro e posiciona cada par de pecas iguais
     # em posicoes aleatorias.
-    for j in range(0, dim / 2):
+    for j in range(0, (int)(dim / 2)):
         for i in range(1, dim + 1):
 
             # Sorteio da posicao da segunda peca com valor 'i'
@@ -191,27 +192,29 @@ def imprimeStatus(tabuleiro, placar, vez):
 # em caso de sucesso, ou False em caso de erro.
 def leCoordenada(dim):
 
-    input = raw_input("Especifique uma peca: ")
+    inp = input("Especifique uma peca: ")
 
     try:
-        i = int(input.split(' ')[0])
-        j = int(input.split(' ')[1])
-    except ValueError:
+        i = int(inp.split(' ')[0])
+        j = int(inp.split(' ')[1])
+    except:
         print("Coordenadas invalidas! Use o formato \"i j\" (sem aspas),")
         print("onde i e j sao inteiros maiores ou iguais a 0 e menores que {0}".format(dim))
-        raw_input("Pressione <enter> para continuar...")
+        input("Pressione <enter> para continuar...")
         return False
+    
+    
 
     if i < 0 or i >= dim:
 
         print("Coordenada i deve ser maior ou igual a zero e menor que {0}".format(dim))
-        raw_input("Pressione <enter> para continuar...")
+        input("Pressione <enter> para continuar...")
         return False
 
     if j < 0 or j >= dim:
 
         print("Coordenada j deve ser maior ou igual a zero e menor que {0}".format(dim))
-        raw_input("Pressione <enter> para continuar...")
+        input("Pressione <enter> para continuar...")
         return False
 
     return (i, j)
@@ -262,7 +265,7 @@ while paresEncontrados < totalDePares:
         if abrePeca(tabuleiro, i1, j1) == False:
 
             print("Escolha uma peca ainda fechada!")
-            raw_input("Pressione <enter> para continuar...")
+            input("Pressione <enter> para continuar...")
             continue
 
         break 
@@ -284,7 +287,7 @@ while paresEncontrados < totalDePares:
         if abrePeca(tabuleiro, i2, j2) == False:
 
             print("Escolha uma peca ainda fechada!")
-            raw_input("Pressione <enter> para continuar...")
+            input("Pressione <enter> para continuar...")
             continue
 
         break 
@@ -334,3 +337,5 @@ if len(vencedores) > 1:
 else:
 
     print("Jogador {0} foi o vencedor!".format(vencedores[0] + 1))
+
+
