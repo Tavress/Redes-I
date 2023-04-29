@@ -297,7 +297,7 @@ def jogo():
             imprimeStatus(tabuleiro, placar, vez)
 
             # Solicita coordenadas da primeira peca.
-            connections[vez].send('your_turn'.encode(FORMAT))
+            connections[vez].send("your_turn".encode(FORMAT))
             coordenadas = leCoordenada(dim,vez)
             if coordenadas == False:
                 continue
@@ -316,7 +316,7 @@ def jogo():
 
         # Requisita segunda peca do proximo jogador
         while True:
-
+            print('entrei aqui!')
             # Imprime status do jogo
             imprimeStatus(tabuleiro, placar, vez)
 
@@ -393,6 +393,8 @@ def start_game():
     while True:
         if len(connections) >= 2:
             jogo()
+
+
 
 
 # Inicialização do servidor
