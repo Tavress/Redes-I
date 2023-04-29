@@ -17,7 +17,6 @@ server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(ADDR)
 
 connections = []
-choices_dict = {}
 
 
 def handle_client(conn, addr):
@@ -298,6 +297,7 @@ def jogo():
             imprimeStatus(tabuleiro, placar, vez)
 
             # Solicita coordenadas da primeira peca.
+            connections[vez].send('your_turn'.encode(FORMAT))
             coordenadas = leCoordenada(dim,vez)
             if coordenadas == False:
                 continue
@@ -361,6 +361,7 @@ def jogo():
 
             fechaPeca(tabuleiro, i1, j1)
             fechaPeca(tabuleiro, i2, j2)
+            connections[vez].send('end_of_your_turn'.encode(FORMAT))
             vez = (vez + 1) % nJogadores
 
     # Verificar o vencedor e imprimir

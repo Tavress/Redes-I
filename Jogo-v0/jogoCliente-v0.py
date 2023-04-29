@@ -8,6 +8,7 @@ DISCONNECT_MESSAGE = "!DISCONNECT"
 SERVER = socket.gethostbyname(socket.gethostname())
 ADDR = (SERVER, PORT)
 
+my_turn = False
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -18,9 +19,11 @@ def send(msg):
 
 
 def play():
+    play = ''
     while True:
-        play = input()
-        send(play)
+        if my_turn:
+            play = input()
+            send(play)
 
         if play == DISCONNECT_MESSAGE:
             client.close()
@@ -31,7 +34,10 @@ def get_message():
         msg = client.recv(1024).decode(FORMAT)
         if msg:
             print(f"{msg}")
-    
+        if msg == 'your_turn':
+            my_turn = True
+        if msg == 'end_of_your_turn':
+            my_turn = False
 msg_thread = threading.Thread(target=get_message)
 play_thread = threading.Thread(target=play)
 
