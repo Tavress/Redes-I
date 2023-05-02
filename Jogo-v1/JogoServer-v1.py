@@ -386,6 +386,9 @@ def jogo(dim, nJogadores):
         for con in connections:
             send(con,"\n\nJogador {0} foi o vencedor!\n".format(vencedores[0] + 1))
             send(con,'game_over')
+        
+        connections.clear()
+        print('Aguardando conexões para novo jogo...')
 
 
 
@@ -404,7 +407,6 @@ def start_game(dim,nJogadores):
             for con in connections:
                 send(con,'Iniciando em 1...\n')
             time.sleep(1)
-            start = False
             jogo(dim,nJogadores)
 
 dim = int(input('Informe a dimensão do tabuleiro (número par e menor do que 10): '))
