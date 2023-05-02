@@ -3,9 +3,7 @@ import threading
 import os
 
 HEADER = 64
-#PORT = 65432
 FORMAT = 'utf-8'
-#SERVER = socket.gethostbyname(socket.gethostname())
 
 def limpaTela():
     
