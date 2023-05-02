@@ -51,9 +51,9 @@ def check_event_message(msg):
 def play():
     play = ''
     while True:
+        play = input()
         if len(disconnected) == 1:
             break
-        play = input()
         if len(my_turn) == 1:
             send(play)
         else:
@@ -68,8 +68,8 @@ def get_message():
         event = check_event_message(msg)
         if msg and not event:
             print(f"{msg}", end='')
-    
-    print('\n\nDesconectado do servidor.\n')
+
+    print('\n\nDesconectado do servidor. Pressione <enter> para sair.\n')
     return 
        
 
