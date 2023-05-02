@@ -28,7 +28,6 @@ def receive():
     return msg
 
 
-
 def check_event_message(msg):
     if msg == 'your_turn':
         if len(my_turn) == 0:
@@ -43,6 +42,9 @@ def check_event_message(msg):
         return True
     elif msg == 'game_over':
         client.close()
+        disconnected.append(1)
+        return True
+    elif msg == 'refused_connection':
         disconnected.append(1)
         return True
 

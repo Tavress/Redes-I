@@ -33,23 +33,27 @@ def send(conn,msg):
     conn.send(message)
 
 
-def handle_client(conn,addr):
-    connections.append(conn)
-    send(conn,'Você é o jogador número {}\nAguardando novos jogadores...\n'.format(len(connections)))
-    
+def handle_client(conn,nJogadores):
+    if len(connections) < nJogadores:
+        connections.append(conn)
+        send(conn,'Você é o jogador número {}\nAguardando novos jogadores...\n'.format(len(connections)))
+    else:
+        send(conn,'Erro: o jogo já está lotado!')
+        send(conn,'refused_connection')
+        conn.close()
     
 
-def start_server():
+def start_server(nJogadores):
     server.listen()
-    print(f"[LISTENING] Server is listening on {SERVER}")
+    print(f"[LISTENING] Server is listening on {SERVER}, port {PORT}")
     while True:
         conn, addr = server.accept()
-        thread = threading.Thread(target=handle_client, args = (conn,addr))
+        thread = threading.Thread(target=handle_client, args = (conn,nJogadores))
         thread.start()
 
 
 
-def jogo():
+def jogo(dim, nJogadores):
 
 
     ##
@@ -265,12 +269,6 @@ def jogo():
     # Parametros da partida
     ##
 
-    # Tamanho (da lateral) do tabuleiro. NECESSARIAMENTE PAR E MENOR QUE 10!
-    dim = 4
-
-    # Numero de jogadores
-    nJogadores = 2
-
     # Numero total de pares de pecas
     totalDePares = dim**2 / 2
 
@@ -392,10 +390,10 @@ def jogo():
 
 
 # inicializa o jogo quando houver ao menos 2 jogadores conectados
-def start_game():
+def start_game(dim,nJogadores):
     start = True
     while start:
-        if len(connections) >= 2:
+        if len(connections) == nJogadores:
             time.sleep(2)
             for con in connections:
                 send(con,'Iniciando em 3...\n')
@@ -407,14 +405,19 @@ def start_game():
                 send(con,'Iniciando em 1...\n')
             time.sleep(1)
             start = False
-            jogo()
+            jogo(dim,nJogadores)
 
-
+dim = int(input('Informe a dimensão do tabuleiro (número par e menor do que 10): '))
+while dim % 2 == 1 or dim >= 10 or dim < 2:
+    dim = input('Valor inválido. Informe um um número par menor do que 10: ')
+nJogadores = int(input('Informe a quantidade de jogadores: '))
+while nJogadores < 2:
+    nJogadores = input('Valor inválido. Informe um número maior ou igual a 2: ')
 
 # Inicialização do servidor
-server_thread = threading.Thread(target=start_server)
+server_thread = threading.Thread(target=start_server, args=[nJogadores])
 server_thread.start()
 
 # inicializa a espera por 2 jogadores 
-start_game_thread = threading.Thread(target=start_game)
+start_game_thread = threading.Thread(target=start_game, args=(dim, nJogadores))
 start_game_thread.start()
