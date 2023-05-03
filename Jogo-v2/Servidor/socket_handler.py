@@ -10,7 +10,11 @@ ADDR = (SERVER, PORT)
 def handle_client(conn,nJogadores,connections):
     if len(connections) < nJogadores:
         connections.append(conn)
-        svc.send(conn,'Você é o jogador número {}\nAguardando novos jogadores...\n'.format(len(connections)))
+        svc.send(conn,'Você é o jogador número {}\n'.format(len(connections)))
+        if len(connections) < nJogadores:
+            svc.send(conn,'\nAguardando novos jogadores...\n')
+        if len(connections) == nJogadores:
+            svc.send_for_all(connections,'O jogo irá começar!\n')
     else:
         svc.send(conn,'Erro: o jogo já está lotado!')
         svc.send(conn,'refused_connection')
