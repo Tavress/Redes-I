@@ -29,6 +29,5 @@ def start_server(nJogadores,connections):
     print(f"[LISTENING] Server is listening on {SERVER}, port {PORT}")
     while True:
         conn, addr = server.accept()
-        thread = threading.Thread(target=handle_client, args = (conn,nJogadores,connections))
-        thread.start()
+        handle_client(conn, nJogadores,connections)
 
