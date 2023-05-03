@@ -7,46 +7,52 @@ class Vector:
         self.x = x
         self.y = y
 
-    def to_turple(self) -> tuple[float,float]:
-        return (self.x,self.y)
+    def to_turple(self) -> tuple[float, float]:
+        return (self.x, self.y)
 
 
 class Card:
     original_image = pygame.image.load("cliente\\GUI\\src\\button.png")
-    screen : pygame.Surface
+    screen: pygame.Surface
 
     @staticmethod
-    def set_screen(new_screen :pygame.surface):
+    def set_screen(new_screen: pygame.surface):
         Card.screen = new_screen
 
     @staticmethod
-    def get_card_matrix(size : int) -> list[list[Card]]:
-        Card.original_image = pygame.transform.scale_by(Card.original_image,1/size)
+    def get_card_matrix(size: int) -> list[list[Card]]:
+        Card.original_image = pygame.transform.scale_by(Card.original_image, 1 / size)
         cards = []
         for i in range(size):
             cards.append([])
             for j in range(size):
+                x = (
+                    i * Card.screen.get_width() / (size)
+                    + 2 * Card.original_image.get_width()
+                )
+                y = (
+                    j * Card.screen.get_height() / (size)
+                    + Card.original_image.get_height()
+                )
                 cards[i].append(
                     Card(
                         0,
                         Card.screen,
-                        Vector(
-                            (i) * Card.screen.get_width() / (size) + 2*Card.original_image.get_width(), (j) * Card.screen.get_height() / (size) + Card.original_image.get_height()
-                        ),
+                        Vector(x, y),
                     )
                 )
-        return cards 
+        return cards
 
     def __init__(
         self,
         number: int,
         screen: pygame.Surface,
-        position : Vector,
-        text_color=(0.0,0.0,0.0),
-        scale_factor = 1
+        position: Vector,
+        text_color=(0.0, 0.0, 0.0),
+        scale_factor=1,
     ):
         self.value = number
-        self.image = self.original_image.copy() 
+        self.image = self.original_image.copy()
         self.screen = screen
 
         self.button = pygame.Surface(self.image.get_size())
@@ -59,10 +65,18 @@ class Card:
         font = pygame.font.SysFont(None, 50)
 
         self.text_color = text_color
-        self.text = font.render(f"{self.value}", True, (0,0,0))
-        text_x = self.button.get_width() // 2 + self.button_pos.x - self.text.get_width() // 2
-        text_y = self.button.get_height() // 2 + self.button_pos.y - self.text.get_height() // 2
-        
+        self.text = font.render(f"{self.value}", True, (0, 0, 0))
+        text_x = (
+            self.button.get_width() // 2
+            + self.button_pos.x
+            - self.text.get_width() // 2
+        )
+        text_y = (
+            self.button.get_height() // 2
+            + self.button_pos.y
+            - self.text.get_height() // 2
+        )
+
         self.text_pos = (text_x, text_y)
 
         self.is_selected = False
