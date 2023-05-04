@@ -329,6 +329,10 @@ def jogo(dim, nJogadores,connections):
             svc.send(con,"\n")
             svc.send(con,'game_over')
 
+        connections.clear()
+        print('Aguardando conexões para novo jogo...')
+    
+
     else:
         svc.send_for_all(connections,"\n\nJogador {0} foi o vencedor!\n".format(vencedores[0] + 1))
         svc.send_for_all(connections,'game_over')
