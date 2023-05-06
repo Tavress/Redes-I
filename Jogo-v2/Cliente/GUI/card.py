@@ -1,13 +1,13 @@
 from __future__ import annotations
 import pygame
 from pygame import Vector2
-from Button import Toggle
-from Window import Window
+from GUI.Toggle import Toggle
+from GUI.Window import Window
 
 
 class Card(Toggle):
     original_image = pygame.image.load("GUI\\src\\button.png")
-    screen : pygame.surface
+    screen: pygame.surface
 
     @staticmethod
     def get_card_matrix(size: int) -> list[list[Card]]:
@@ -45,7 +45,7 @@ class Card(Toggle):
             screen=Card.screen,
             position=position,
             size=Card.original_image.get_size(),
-            on_clicked = self.reveal,
+            on_clicked=self.reveal,
             text=number,
             text_color=text_color,
             scale_factor=scale_factor,
