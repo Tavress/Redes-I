@@ -16,6 +16,7 @@ def jogo(dim, nJogadores,connections):
         # Imprime coordenadas horizontais
         dim = len(tabuleiro)
         for con in connections:
+            svc.send_matrix(con,dim,tabuleiro)
             svc.send(con,"     ")
             for i in range(0, dim):
                 svc.send(con,"{0:2d} ".format(i))
