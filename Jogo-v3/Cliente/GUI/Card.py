@@ -10,26 +10,27 @@ class Card(Toggle):
     screen: pygame.surface
 
     @staticmethod
-    def get_card_matrix(size: int) -> list[list[Card]]:
+    def get_card_matrix(size: int, matrix) -> list[list[Card]]:
         Card.screen = Window.current.screen
-        Card.original_image = pygame.transform.scale_by(
-            Card.original_image, 1 / size)
+        factor = 1 / size if size > 0 else 1
+        image = pygame.transform.scale_by(
+            Card.original_image, factor)
         cards = []
         for i in range(size):
             cards.append([])
             for j in range(size):
                 x = (
                     i * Card.screen.get_width() / size
-                    + 2 * Card.original_image.get_width()
+                    + 2 * image.get_width()
                 )
 
                 y = (
                     j * Card.screen.get_height() / size
-                    + Card.original_image.get_height()
+                    + image.get_height()
                 )
                 cards[i].append(
                     Card(
-                        0,
+                        matrix[i][j],
                         pygame.Vector2(x, y),
                     )
                 )
@@ -57,6 +58,11 @@ class Card(Toggle):
         self.image = self.original_image.copy()
 
         self.is_selected = False
+
+    def update(self, value):
+        self.value = value
+        self.text_messsage = self.value
+        self.update_text()
 
     def reveal(self):
         pass

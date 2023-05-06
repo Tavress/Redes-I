@@ -34,5 +34,8 @@ def get_ip_and_port() -> tuple[str, int]:
 
 
 def show_cards(matrix) -> str:
-    result = GUI.scenes.game_screen.get_GUI_inputs(len(matrix), True)
+    global input_window
+    result = GUI.scenes.game_screen.get_GUI_inputs(matrix, True)
+    if result is None:
+        return ""
     return f"{result[0]} {result[1]}"

@@ -11,4 +11,5 @@ class Window:
         Window.current = self
 
     def clear(self):
-        self.screen.fill((0, 0, 0))
+        self.screen.fill((255, 255, 255))
+        
