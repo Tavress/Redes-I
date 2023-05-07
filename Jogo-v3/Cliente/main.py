@@ -1,7 +1,10 @@
+import tkinter as tk
 import pygame
+from pygame._sdl2 import messagebox
 import GUI.GUI_handler as gui
 from GUI.Window import Window
 from GUI.Card import Card
+import services as svc
 import socket_handler as sck
 import threading
 import message_handler as msgh
@@ -10,15 +13,14 @@ import play_handler as plh
 disconnected = []
 my_turn = []
 matrix = []
-
-gui.start()
+gui.start("Preecha as informaçãoes do server!")
 # Início da execução do programa cliente
 # print('Informe o IP do servidor: ')
 # SERVER = str(input())
 # print('Informe a porta: ')
 # PORT = int(input())
 gui.quit()
-ADDR = ("192.168.0.6", 65432)  # (SERVER, PORT)
+ADDR = ("172.24.64.1", 65432)  # (SERVER, PORT)
 
 # Cria a conexão TCP com o servidor
 client = sck.start_client(ADDR)
@@ -55,6 +57,8 @@ def get_GUI_inputs(is_my_turn: bool) -> tuple[int, int]:
 
 def draw_cards(card_matrix):
     size = len(card_matrix)
+    if len(matrix) < 1 or len(card_matrix) < 1:
+        return
     for i in range(size):
         for j in range(size):
             card_matrix[i][j].update(matrix[i][j])
@@ -78,12 +82,35 @@ def show_inputs():
     pygame.display.update()
 
 
+def show_score(disconnected):
+    window = tk.Tk()
+    window.title("Placar")
+
+    label = tk.Label(window, text="Placar dos jogares\n\n")
+    label.pack()
+    old_player_list = ''
+    while True:
+        if len(disconnected) == 1:
+            break
+        player_list = svc.get_score_list()
+        if old_player_list != player_list:
+            label.destroy()
+            label = tk.Label(window, text="Placar dos jogares\n\n")
+            label.pack()
+            for jog in player_list.split('\n'):
+                label.config(text=label.cget('text') + f"{jog}\n")
+            old_player_list = player_list
+        window.update()
+
+
 msg_thread = threading.Thread(target=msgh.get_message, args=(
     disconnected, client, my_turn, matrix))
+score_thread = threading.Thread(target=show_score, args=(disconnected))
 play_thread = threading.Thread(target=plh.play, args=(
     client, my_turn, disconnected, matrix, get_GUI_inputs, show_inputs))
 
 msg_thread.daemon = True
 
+score_thread.start()
 msg_thread.start()
 play_thread.start()

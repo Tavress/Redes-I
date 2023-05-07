@@ -54,7 +54,8 @@ class Toggle:
 
     def check_mouse_hover(self, event: pygame.event) -> bool:
         if (
-            self.position.x < event.pos[0] < self.position.x + self.button.get_width()
+            self.position.x < event.pos[0] < self.position.x +
+                self.button.get_width()
             and self.position.y
             < event.pos[1]
             < self.position.y + self.button.get_height()
@@ -90,7 +91,8 @@ class Toggle:
 
     def change_color(self, color: pygame.color):
         self.button.fill(color)
-        self.button.blit(self.image, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
+        self.button.blit(self.image, (0, 0),
+                         special_flags=pygame.BLEND_RGBA_MULT)
         self.image = self.original_image.copy()
 
     def set_color(self):
@@ -105,10 +107,12 @@ class Toggle:
     def fit_text(self):
         if self.text.get_width() > self.original_size.x:
             self.button = pygame.transform.scale(
-                self.button, size=(self.text.get_width(), self.button.get_height())
+                self.button, size=(self.text.get_width(),
+                                   self.button.get_height())
             )
         if self.text.get_height() > self.original_size.y:
             self.button = pygame.transform.scale(
-                self.button, size=(self.button.get_width(), self.text.get_height())
+                self.button, size=(self.button.get_width(),
+                                   self.text.get_height())
             )
         self.realign_position()

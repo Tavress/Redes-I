@@ -7,31 +7,32 @@ from GUI.Window import Window
 
 class Card(Toggle):
     original_image = pygame.image.load("GUI\\src\\button.png")
+    corrected_image = original_image
     screen: pygame.surface
 
     @staticmethod
     def get_card_matrix(size: int, matrix) -> list[list[Card]]:
         Card.screen = Window.current.screen
-        factor = 1 / size if size > 0 else 1
-        image = pygame.transform.scale_by(
+        factor = (1 / size) if size > 0 else 1
+        Card.corrected_image = pygame.transform.scale_by(
             Card.original_image, factor)
         cards = []
         for i in range(size):
             cards.append([])
             for j in range(size):
                 x = (
-                    i * Card.screen.get_width() / size
-                    + 2 * image.get_width()
+                    (i+1) * Card.screen.get_width() / (size) -
+                    Card.screen.get_width() / (2 * size)
                 )
-
                 y = (
-                    j * Card.screen.get_height() / size
-                    + image.get_height()
+                    (j+1) * Card.screen.get_height() / (size) -
+                    Card.screen.get_height() / (2 * size)
                 )
                 cards[i].append(
                     Card(
                         matrix[i][j],
                         pygame.Vector2(x, y),
+                        scale_factor=factor
                     )
                 )
         return cards
@@ -46,12 +47,12 @@ class Card(Toggle):
         super().__init__(
             screen=Card.screen,
             position=position,
-            size=Card.original_image.get_size(),
+            size=Card.corrected_image.get_size(),
             on_clicked=self.reveal,
             text=number,
             text_color=text_color,
             scale_factor=scale_factor,
-            image=Card.original_image.copy(),
+            image=Card.corrected_image.copy(),
         )
 
         self.value = number

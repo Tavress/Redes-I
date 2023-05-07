@@ -11,7 +11,7 @@ connections = []
 # nJogadores = int(input('Informe a quantidade de jogadores: '))
 # while nJogadores < 2:
 #    nJogadores = input('Valor inválido. Informe um número maior ou igual a 2: ')
-dim, nJogadores = 2, 2
+dim, nJogadores = 2, 1
 # Inicialização do servidor
 server_thread = threading.Thread(target=sck.start_server, args=[
                                  nJogadores, connections])

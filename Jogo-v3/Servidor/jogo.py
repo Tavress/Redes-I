@@ -2,8 +2,8 @@ import time
 import random
 import services as svc
 
-def jogo(dim, nJogadores,connections):
 
+def jogo(dim, nJogadores, connections):
 
     ##
     # Funcoes de manipulacao do tabuleiro
@@ -11,52 +11,52 @@ def jogo(dim, nJogadores,connections):
 
     # Imprime estado atual do tabuleiro
     def imprimeTabuleiro(tabuleiro):
-        svc.send_for_all(connections,'limpa_tela')
+        svc.send_for_all(connections, 'limpa_tela')
 
         # Imprime coordenadas horizontais
         dim = len(tabuleiro)
         for con in connections:
-            svc.send_matrix(con,dim,tabuleiro)
-            svc.send(con,"     ")
-            for i in range(0, dim):
-                svc.send(con,"{0:2d} ".format(i))
-
-            svc.send(con,"\n")
-
+            svc.send_matrix(con, dim, tabuleiro)
+            # svc.send(con, "     ")
+            # for i in range(0, dim):
+            #    svc.send(con, "{0:2d} ".format(i))
+#
+            # svc.send(con, "\n")
+#
             # Imprime separador horizontal
-            svc.send(con,"-----")
-            for i in range(0, dim):
-                svc.send(con,"---")
+            # svc.send(con, "-----")
+            # for i in range(0, dim):
+            #    svc.send(con, "---")
+#
+            # svc.send(con, "\n")
+#
+            # for i in range(0, dim):
+#
+            #    # Imprime coordenadas verticais
+            #    svc.send(con, "{0:2d} | ".format(i))
+#
+            #    # Imprime conteudo da linha 'i'
+            #    for j in range(0, dim):
+#
+            #        # Peca ja foi removida?
+            #        if tabuleiro[i][j] == '-':
+#
+            #            # Sim.
+            #            svc.send(con, " - ")
+#
+            #        # Peca esta levantada?
+            #        elif tabuleiro[i][j] >= 0:
+#
+            #            # Sim, imprime valor.
+            #            svc.send(con, "{0:2d} ".format(tabuleiro[i][j]))
+            #        else:
+#
+            #            # Nao, imprime '?'
+            #            svc.send(con, " ? ")
+#
+            #    svc.send(con, "\n")
 
-            svc.send(con,"\n")
-
-            for i in range(0, dim):
-
-                # Imprime coordenadas verticais
-                svc.send(con,"{0:2d} | ".format(i))
-
-                # Imprime conteudo da linha 'i'
-                for j in range(0, dim):
-
-                    # Peca ja foi removida?
-                    if tabuleiro[i][j] == '-':
-
-                        # Sim.
-                        svc.send(con," - ")
-
-                    # Peca esta levantada?
-                    elif tabuleiro[i][j] >= 0:
-
-                        # Sim, imprime valor.
-                        svc.send(con,"{0:2d} ".format(tabuleiro[i][j]))
-                    else:
-
-                        # Nao, imprime '?'
-                        svc.send(con," ? ")
-
-                svc.send(con,"\n")
-
-    # Cria um novo tabuleiro com pecas aleatorias. 
+    # Cria um novo tabuleiro com pecas aleatorias.
     # 'dim' eh a dimensao do tabuleiro, necessariamente
     # par.
     def novoTabuleiro(dim):
@@ -81,7 +81,7 @@ def jogo(dim, nJogadores,connections):
 
                 posicoesDisponiveis.append((i, j))
 
-        # Varre todas as pecas que serao colocadas no 
+        # Varre todas as pecas que serao colocadas no
         # tabuleiro e posiciona cada par de pecas iguais
         # em posicoes aleatorias.
         for j in range(0, (int)(dim / 2)):
@@ -140,7 +140,7 @@ def jogo(dim, nJogadores,connections):
             tabuleiro[i][j] = "-"
             return True
 
-    ## 
+    ##
     # Funcoes de manipulacao do placar
     ##
 
@@ -160,10 +160,13 @@ def jogo(dim, nJogadores,connections):
         nJogadores = len(placar)
 
         for con in connections:
-            svc.send(con,"Placar:\n")
-            svc.send(con,"---------------------\n")
+            svc.send(con, "Placar:\n")
+            svc.send(con, "---------------------\n")
+            all_players = 'P='
             for i in range(0, nJogadores):
-                svc.send(con,"Jogador {0}: {1:2d}\n".format(i + 1, placar[i]))
+                all_players += "Jogador {0}: {1:2d}\n".format(
+                    i + 1, placar[i])
+            svc.send(con, all_players)
 
     ##
     # Funcoes de interacao com o usuario
@@ -172,44 +175,47 @@ def jogo(dim, nJogadores,connections):
     # Imprime informacoes basicas sobre o estado atual da partida.
     def imprimeStatus(tabuleiro, placar, vez):
 
-            imprimeTabuleiro(tabuleiro)
-            svc.send(connections[vez],'\n')
+        imprimeTabuleiro(tabuleiro)
+        svc.send(connections[vez], '\n')
 
-            imprimePlacar(placar)
-            svc.send(connections[vez],'\n')
+        imprimePlacar(placar)
+        svc.send(connections[vez], '\n')
 
-            svc.send(connections[vez],"Sua vez!\n")
-            for i in range(0,len(connections)):
-                if i != vez:
-                    svc.send(connections[i],"Vez do Jogador {0}.\n".format(vez + 1))
+        svc.send(connections[vez], "Sua vez!\n")
+        for i in range(0, len(connections)):
+            if i != vez:
+                svc.send(connections[i],
+                         "Vez do Jogador {0}.\n".format(vez + 1))
 
     # Le um coordenadas de uma peca. Retorna uma tupla do tipo (i, j)
     # em caso de sucesso, ou False em caso de erro.
-    def leCoordenada(dim,vez):
+    def leCoordenada(dim, vez):
 
-        svc.send(connections[vez],"Especifique uma peça:\n")
+        svc.send(connections[vez], "Especifique uma peça:\n")
         inp = svc.receive(connections[vez])
         try:
             i = int(inp.split(' ')[0])
             j = int(inp.split(' ')[1])
         except:
-            svc.send(connections[vez],"Coordenadas invalidas! Use o formato \"i j\" (sem aspas),\n")
-            svc.send(connections[vez],"onde i e j sao inteiros maiores ou iguais a 0 e menores que {0}\n".format(dim))
-            svc.send(connections[vez],"Pressione <enter> para continuar...\n")
+            svc.send(
+                connections[vez], "Coordenadas invalidas! Use o formato \"i j\" (sem aspas),\n")
+            svc.send(
+                connections[vez], "onde i e j sao inteiros maiores ou iguais a 0 e menores que {0}\n".format(dim))
+            svc.send(connections[vez], "Pressione <enter> para continuar...\n")
             return False
-        
-        
 
         if i < 0 or i >= dim:
 
-            svc.send(connections[vez],"Coordenada i deve ser maior ou igual a zero e menor que {0}\n".format(dim))
-            svc.send(connections[vez],"Pressione <enter> para continuar...\n")
+            svc.send(
+                connections[vez], "Coordenada i deve ser maior ou igual a zero e menor que {0}\n".format(dim))
+            svc.send(connections[vez], "Pressione <enter> para continuar...\n")
             return False
 
         if j < 0 or j >= dim:
 
-            svc.send(connections[vez],"Coordenada j deve ser maior ou igual a zero e menor que {0}\n".format(dim))
-            svc.send(connections[vez],"Pressione <enter> para continuar...\n")
+            svc.send(
+                connections[vez], "Coordenada j deve ser maior ou igual a zero e menor que {0}\n".format(dim))
+            svc.send(connections[vez], "Pressione <enter> para continuar...\n")
             return False
 
         return (i, j)
@@ -231,7 +237,7 @@ def jogo(dim, nJogadores,connections):
     # Cria um novo placar zerado
     placar = novoPlacar(nJogadores)
 
-    # Partida continua enquanto ainda ha pares de pecas a 
+    # Partida continua enquanto ainda ha pares de pecas a
     # casar.
     paresEncontrados = 0
     vez = 0
@@ -243,9 +249,9 @@ def jogo(dim, nJogadores,connections):
             # Imprime status do jogo
             imprimeStatus(tabuleiro, placar, vez)
 
-            svc.send(connections[vez],"your_turn")
+            svc.send(connections[vez], "your_turn")
             # Solicita coordenadas da primeira peca.
-            coordenadas = leCoordenada(dim,vez)
+            coordenadas = leCoordenada(dim, vez)
             if coordenadas == False:
                 svc.receive(connections[vez])
                 continue
@@ -255,11 +261,12 @@ def jogo(dim, nJogadores,connections):
             # Testa se peca ja esta aberta (ou removida)
             if abrePeca(tabuleiro, i1, j1) == False:
 
-                svc.send(connections[vez],"Escolha uma peca ainda fechada! (Pressione <enter> para continuar)\n")
+                svc.send(
+                    connections[vez], "Escolha uma peca ainda fechada! (Pressione <enter> para continuar)\n")
                 svc.receive(connections[vez])
                 continue
 
-            break 
+            break
 
         # Requisita segunda peca do proximo jogador
         while True:
@@ -267,7 +274,7 @@ def jogo(dim, nJogadores,connections):
             imprimeStatus(tabuleiro, placar, vez)
 
             # Solicita coordenadas da segunda peca.
-            coordenadas = leCoordenada(dim,vez)
+            coordenadas = leCoordenada(dim, vez)
             if coordenadas == False:
                 svc.receive(connections[vez])
                 continue
@@ -277,23 +284,26 @@ def jogo(dim, nJogadores,connections):
             # Testa se peca ja esta aberta (ou removida)
             if abrePeca(tabuleiro, i2, j2) == False:
 
-                svc.send(connections[vez],"Escolha uma peca ainda fechada! (Pressione <enter> para continuar)\n")
+                svc.send(
+                    connections[vez], "Escolha uma peca ainda fechada! (Pressione <enter> para continuar)\n")
                 svc.receive(connections[vez])
                 continue
-            
-            break 
+
+            break
 
         # Imprime status do jogo
         imprimeStatus(tabuleiro, placar, vez)
 
-        svc.send(connections[vez],"Pecas escolhidas --> ({0}, {1}) e ({2}, {3})\n".format(i1, j1, i2, j2))
+        svc.send(
+            connections[vez], "Pecas escolhidas --> ({0}, {1}) e ({2}, {3})\n".format(i1, j1, i2, j2))
 
         # Pecas escolhidas sao iguais?
         if tabuleiro[i1][j1] == tabuleiro[i2][j2]:
 
             for con in connections:
-                svc.send(con,"Pecas casam! Ponto para o jogador {0}.\n".format(vez + 1))
-            
+                svc.send(
+                    con, "Pecas casam! Ponto para o jogador {0}.\n".format(vez + 1))
+
             incrementaPlacar(placar, vez)
             paresEncontrados = paresEncontrados + 1
             removePeca(tabuleiro, i1, j1)
@@ -302,15 +312,14 @@ def jogo(dim, nJogadores,connections):
             time.sleep(3)
         else:
             for con in connections:
-                svc.send(con,"Pecas nao casam!\n")
-            
+                svc.send(con, "Pecas nao casam!\n")
+
             time.sleep(3)
 
             fechaPeca(tabuleiro, i1, j1)
             fechaPeca(tabuleiro, i2, j2)
-            svc.send(connections[vez],"end_of_your_turn")
+            svc.send(connections[vez], "end_of_your_turn")
             vez = (vez + 1) % nJogadores
-
 
     # Verificar o vencedor e imprimir
     pontuacaoMaxima = max(placar)
@@ -323,36 +332,36 @@ def jogo(dim, nJogadores,connections):
     if len(vencedores) > 1:
 
         for con in connections:
-            svc.send(con,"\n\nHouve empate entre os jogadores ")
+            svc.send(con, "\n\nHouve empate entre os jogadores ")
             for i in vencedores:
-                svc.send(con,(str(i + 1) + ' '))
+                svc.send(con, (str(i + 1) + ' '))
 
-            svc.send(con,"\n")
-            svc.send(con,'game_over')
+            svc.send(con, "\n")
+            svc.send(con, 'game_over')
 
         connections.clear()
         print('Aguardando conexões para novo jogo...')
-    
 
     else:
-        svc.send_for_all(connections,"\n\nJogador {0} foi o vencedor!\n".format(vencedores[0] + 1))
-        svc.send_for_all(connections,'game_over')
+        svc.send_for_all(
+            connections, "\n\nJogador {0} foi o vencedor!\n".format(vencedores[0] + 1))
+        svc.send_for_all(connections, 'game_over')
         connections.clear()
         print('Aguardando conexões para novo jogo...')
 
 
-def handle_game(dim,nJogadores,connections):
+def handle_game(dim, nJogadores, connections):
     start = True
     while start:
         if len(connections) == nJogadores:
             time.sleep(2)
             for con in connections:
-                svc.send(con,'Iniciando em 3...\n')
+                svc.send(con, 'Iniciando em 3...\n')
             time.sleep(1)
             for con in connections:
-                svc.send(con,'Iniciando em 2...\n')
+                svc.send(con, 'Iniciando em 2...\n')
             time.sleep(1)
             for con in connections:
-                svc.send(con,'Iniciando em 1...\n')
+                svc.send(con, 'Iniciando em 1...\n')
             time.sleep(1)
-            jogo(dim,nJogadores,connections)
+            jogo(dim, nJogadores, connections)

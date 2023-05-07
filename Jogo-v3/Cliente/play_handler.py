@@ -3,7 +3,7 @@ import GUI.GUI_handler as gui
 
 
 def play(client, my_turn, disconnected, matrix, input_cards, show_cards):
-    gui.start()
+    gui.start("Jogo da memória!!!")
     play = ''
     while True:
         if len(matrix) == 0:
@@ -15,5 +15,4 @@ def play(client, my_turn, disconnected, matrix, input_cards, show_cards):
             svc.send(play, client)
         else:
             show_cards()
-            print('Aguarde a sua vez!')
     return

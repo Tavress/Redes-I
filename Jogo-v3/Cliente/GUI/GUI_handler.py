@@ -10,17 +10,17 @@ from GUI.Window import Window
 # initialize Pygame
 
 # set the screen dimensions
-screen_width = 640
-screen_height = 480
+screen_width = 1280
+screen_height = 960
 is_running = True
 
 input_window = None
 
 
-def start():
+def start(title):
     global input_window
     pygame.init()
-    input_window = Window(title="Preecha as informações de seu server.")
+    input_window = Window((screen_width, screen_height), title)
 
 
 def quit():
