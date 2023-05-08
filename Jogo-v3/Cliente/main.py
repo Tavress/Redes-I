@@ -42,7 +42,6 @@ def get_GUI_inputs(is_my_turn: bool) -> tuple[int, int]:
     with lock:
         card_matrix = Card.get_card_matrix(size, matrix)
     if size < 1 or not is_my_turn:
-        draw_cards(card_matrix)
         text_display.set_text_message(msgh.get_current_message())
         text_display.draw()
         pygame.display.update()
@@ -80,14 +79,11 @@ def show_inputs():
     global matrix, text_message
     is_running = True
     size = len(matrix)
-    with lock:
-        card_matrix = Card.get_card_matrix(size, matrix)
+    card_matrix = Card.get_card_matrix(size, matrix)
     text_display = Text_Displayer(Window.current.screen, pygame.Vector2(
         Window.current.screen.get_width()//2, Window.current.screen.get_height()-100), (
         Window.current.screen.get_width()//2, 100), None, text_message, (255, 255, 255))
-    card_matrix = Card.get_card_matrix(size, matrix)
     if size < 1:
-        draw_cards(card_matrix)
         text_display.set_text_message(msgh.get_current_message())
         text_display.draw()
         pygame.display.update()

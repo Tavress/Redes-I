@@ -7,7 +7,7 @@ def play(client, my_turn, disconnected, matrix, input_cards, show_cards, show_sc
 
     play = ''
     while True:
-        if len(matrix) == 0:
+        if len(matrix) < 1:
             continue
         if not has_started:
             gui.start("Jogo da memória!!!")
@@ -15,9 +15,13 @@ def play(client, my_turn, disconnected, matrix, input_cards, show_cards, show_sc
             has_started = True
         if len(disconnected) == 1:
             break
-        if len(my_turn) == 1:
-            play = input_cards(len(my_turn) == 1)  # gui.show_cards(matrix)
-            svc.send(play, client)
-        else:
-            show_cards()
+        try:
+            if len(my_turn) == 1:
+                play = input_cards(len(my_turn) == 1)  # gui.show_cards(matrix)
+                if len(my_turn) == 1:
+                    svc.send(play, client)
+            else:
+                show_cards()
+        except:
+            continue
     return

@@ -29,13 +29,20 @@ class Card(Toggle):
                     (j+1) * real_height / (size) -
                     real_height / (2 * size)
                 )
-                cards[i].append(
-                    Card(
-                        matrix[i][j],
-                        pygame.Vector2(x, y),
-                        scale_factor=factor
+                try:
+                    cards[i].append(
+                        Card(
+                            matrix[i][j],
+                            pygame.Vector2(x, y),
+                            scale_factor=factor)
                     )
-                )
+                except:
+                    cards[i].append(
+                        Card(
+                            -1,
+                            pygame.Vector2(x, y),
+                            scale_factor=factor)
+                    )
         return cards
 
     def __init__(
@@ -67,4 +74,5 @@ class Card(Toggle):
         self.update_text()
 
     def reveal(self):
-        pass
+        if self.value == -1:
+            raise ValueError("Card hasnt been received.")
