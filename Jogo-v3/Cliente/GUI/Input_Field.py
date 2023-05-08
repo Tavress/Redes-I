@@ -61,7 +61,7 @@ class Input_Field(Toggle):
                     self.inputed_text += mtch.string
             else:
                 self.inputed_text += txt
-            print(self.inputed_text)
+            # print(self.inputed_text)
             self.place_text()
 
     # pygame.key.stop_text_input()

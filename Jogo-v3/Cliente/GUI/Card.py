@@ -14,6 +14,7 @@ class Card(Toggle):
     def get_card_matrix(size: int, matrix) -> list[list[Card]]:
         Card.screen = Window.current.screen
         factor = (1 / size) if size > 0 else 1
+        real_height = Card.screen.get_height() - 100  # OFFset
         Card.corrected_image = pygame.transform.scale_by(
             Card.original_image, factor)
         cards = []
@@ -25,8 +26,8 @@ class Card(Toggle):
                     Card.screen.get_width() / (2 * size)
                 )
                 y = (
-                    (j+1) * Card.screen.get_height() / (size) -
-                    Card.screen.get_height() / (2 * size)
+                    (j+1) * real_height / (size) -
+                    real_height / (2 * size)
                 )
                 cards[i].append(
                     Card(

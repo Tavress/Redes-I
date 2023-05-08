@@ -1,6 +1,7 @@
 import os
 import tkinter as tk
 from pygame._sdl2 import messagebox
+import threading
 import pyautogui
 import pygame
 
@@ -11,11 +12,7 @@ FORMAT = 'utf-8'
 
 
 score_list = ''
-
-
-def limpaTela():
-
-    os.system('cls' if os.name == 'nt' else 'clear')
+lock = threading.RLock()
 
 
 def send(msg, client):
@@ -49,29 +46,13 @@ def check_event_message(msg, client, my_turn, disconnected, matrix):
     if msg == 'your_turn':
         if len(my_turn) == 0:
             my_turn.append(1)
-            messagebox(
-                "Sua vez!",
-                "Sua vez de jogar =)",
-                info=True,
-                buttons=("OK",),
-            )
             # pygame.display.set_caption("Sua vez de jogar.")
             # Window.current.change_title("Sua vez de jogar.")
         return True
     elif msg == 'end_of_your_turn':
         if len(my_turn) == 1:
             my_turn.remove(1)
-            messagebox(
-                "Acabou sua vez",
-                "Vez do adversário jogar >=)",
-                info=True,
-                buttons=("OK",),
-            )
             # pygame.display.set_caption("Espere seu turno.")
-        return True
-    elif msg == 'limpa_tela':
-        limpaTela()
-        matrix.clear()
         return True
     elif msg == 'game_over':
         client.close()
@@ -97,10 +78,12 @@ def get_score_list():
 
 def receive_matrix(matrix, client):
     dim = int(receive(client))
-    for i in range(0, dim):
-        line = []
-        line_as_string = receive(client)
-        line = line_as_string.split(',')
-        line.pop(0)
-        if len(line) > 0:
-            matrix.append(line)
+    with lock:
+        matrix.clear()
+        for i in range(0, dim):
+            line = []
+            line_as_string = receive(client)
+            line = line_as_string.split(',')
+            line.pop(0)
+            if len(line) > 0:
+                matrix.append(line)
