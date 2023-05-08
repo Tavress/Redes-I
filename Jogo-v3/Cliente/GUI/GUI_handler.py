@@ -1,19 +1,14 @@
+import threading
 import pygame
 import GUI.scenes.input_screen
 import GUI.scenes.game_screen
-from GUI.Button import Button
-from GUI.Toggle import *
-from GUI.Card import Card
-from GUI.Input_Field import Input_Field
 from GUI.Window import Window
+from main import get_matrix
 
-# initialize Pygame
-
-# set the screen dimensions
 screen_width = 1280
 screen_height = 960
 is_running = True
-
+lock = threading.RLock()
 input_window = None
 
 
@@ -39,3 +34,6 @@ def show_cards(matrix) -> str:
     if result is None:
         return ""
     return f"{result[0]} {result[1]}"
+
+
+def get_GUI_inputs(is_my_turn: bool) -> tuple[int, int]:

@@ -1,11 +1,4 @@
-import os
-import tkinter as tk
-from pygame._sdl2 import messagebox
 import threading
-import pyautogui
-import pygame
-
-from GUI.Window import Window
 
 HEADER = 64
 FORMAT = 'utf-8'
@@ -46,13 +39,10 @@ def check_event_message(msg, client, my_turn, disconnected, matrix):
     if msg == 'your_turn':
         if len(my_turn) == 0:
             my_turn.append(1)
-            # pygame.display.set_caption("Sua vez de jogar.")
-            # Window.current.change_title("Sua vez de jogar.")
         return True
     elif msg == 'end_of_your_turn':
         if len(my_turn) == 1:
             my_turn.remove(1)
-            # pygame.display.set_caption("Espere seu turno.")
         return True
     elif msg == 'game_over':
         client.close()

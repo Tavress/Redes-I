@@ -1,4 +1,3 @@
-import GUI.GUI_handler as gui
 import services as svc
 
 message = ""
@@ -14,8 +13,8 @@ def get_message(disconnected, client, my_turn, matrix):
             msg, client, my_turn, disconnected, matrix)
         if msg and not event:
             message = msg
-            print(f"{msg}", end='')
-    print('\n\nDesconectado do servidor. Pressione <enter> para sair.\n')
+            print(f"{msg}\n")
+    print('\n\nDesconectado do servidor. Feche a página para sair.\n')
     return
 
 

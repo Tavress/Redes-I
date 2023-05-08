@@ -195,25 +195,12 @@ def jogo(dim, nJogadores, connections):
             i = int(inp.split(' ')[0])
             j = int(inp.split(' ')[1])
         except:
-            svc.send(
-                connections[vez], "Coordenadas inválidas! Use o formato \"i j\" (sem aspas),")
-            svc.send(
-                connections[vez], "onde i e j sao inteiros maiores ou iguais a 0 e menores que {0}".format(dim))
-            svc.send(connections[vez], "Pressione <enter> para continuar...")
             return False
 
         if i < 0 or i >= dim:
-
-            svc.send(
-                connections[vez], "Coordenada i deve ser maior ou igual a zero e menor que {0}".format(dim))
-            svc.send(connections[vez], "Pressione <enter> para continuar...")
             return False
 
         if j < 0 or j >= dim:
-
-            svc.send(
-                connections[vez], "Coordenada j deve ser maior ou igual a zero e menor que {0}".format(dim))
-            svc.send(connections[vez], "Pressione <enter> para continuar...")
             return False
 
         return (i, j)
@@ -251,7 +238,6 @@ def jogo(dim, nJogadores, connections):
             # Solicita coordenadas da primeira peça.
             coordenadas = leCoordenada(dim, vez)
             if coordenadas == False:
-                svc.receive(connections[vez])
                 continue
 
             i1, j1 = coordenadas
@@ -261,7 +247,9 @@ def jogo(dim, nJogadores, connections):
 
                 svc.send(
                     connections[vez], "Escolha uma peça ainda fechada! (Pressione <enter> para continuar)")
-                svc.receive(connections[vez])
+                msg = svc.receive(connections[vez])
+                while msg != "":
+                    msg = svc.receive(connections[vez])
                 continue
 
             break
@@ -274,7 +262,6 @@ def jogo(dim, nJogadores, connections):
             # Solicita coordenadas da segunda peça.
             coordenadas = leCoordenada(dim, vez)
             if coordenadas == False:
-                svc.receive(connections[vez])
                 continue
 
             i2, j2 = coordenadas
@@ -284,7 +271,9 @@ def jogo(dim, nJogadores, connections):
 
                 svc.send(
                     connections[vez], "Escolha uma peça ainda fechada! (Pressione <enter> para continuar)")
-                svc.receive(connections[vez])
+                msg = svc.receive(connections[vez])
+                while msg != "":
+                    msg = svc.receive(connections[vez])
                 continue
 
             break
