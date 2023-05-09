@@ -15,44 +15,6 @@ def jogo(dim, nJogadores, connections):
         dim = len(tabuleiro)
         for con in connections:
             svc.send_matrix(con, dim, tabuleiro)
-            # svc.send(con, "     ")
-            # for i in range(0, dim):
-            #    svc.send(con, "{0:2d} ".format(i))
-#
-            # svc.send(con, "")
-#
-            # Imprime separador horizontal
-            # svc.send(con, "-----")
-            # for i in range(0, dim):
-            #    svc.send(con, "---")
-#
-            # svc.send(con, "")
-#
-            # for i in range(0, dim):
-#
-            #    # Imprime coordenadas verticais
-            #    svc.send(con, "{0:2d} | ".format(i))
-#
-            #    # Imprime conteudo da linha 'i'
-            #    for j in range(0, dim):
-#
-            #        # peça ja foi removida?
-            #        if tabuleiro[i][j] == '-':
-#
-            #            # Sim.
-            #            svc.send(con, " - ")
-#
-            #        # peça esta levantada?
-            #        elif tabuleiro[i][j] >= 0:
-#
-            #            # Sim, imprime valor.
-            #            svc.send(con, "{0:2d} ".format(tabuleiro[i][j]))
-            #        else:
-#
-            #            # Não, imprime '?'
-            #            svc.send(con, " ? ")
-#
-            #    svc.send(con, "")
 
     # Cria um novo tabuleiro com peças aleatorias.
     # 'dim' eh a dimensao do tabuleiro, necessariamente
@@ -189,7 +151,7 @@ def jogo(dim, nJogadores, connections):
     # em caso de sucesso, ou False em caso de erro.
     def leCoordenada(dim, vez):
 
-        svc.send(connections[vez], "Especifique uma peça:")
+        svc.send(connections[vez], "Especifique uma peça")
         inp = svc.receive(connections[vez])
         try:
             i = int(inp.split(' ')[0])

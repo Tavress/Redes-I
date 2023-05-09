@@ -61,10 +61,7 @@ class Input_Field(Toggle):
                     self.inputed_text += mtch.string
             else:
                 self.inputed_text += txt
-            # print(self.inputed_text)
             self.place_text()
-
-    # pygame.key.stop_text_input()
 
     def remove_last_char(self):
         if self.is_selected:
@@ -78,7 +75,6 @@ class Input_Field(Toggle):
             self.text_messsage = self.default_text
         self.update_text()
         self.fit_text()
-        # self.button = pygame.transform.scale(self.button,size=self.text.get_size())
 
     def do(self):
         pass

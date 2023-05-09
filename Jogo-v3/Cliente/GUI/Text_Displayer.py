@@ -12,6 +12,7 @@ class Text_Displayer:
         on_clicked,
         text="",
         text_color=(0.0, 0.0, 0.0),
+        font_size=25
     ):
         self.original_size = Vector2(size[0], size[1])
 
@@ -26,7 +27,9 @@ class Text_Displayer:
         pivot_y = size[1] // 2
         self.pivot = Vector2(pivot_x, pivot_y)
         self.position = Vector2(position.x - pivot_x, position.y - pivot_y)
-        self.font = pygame.font.SysFont(None, 50)
+        self.small_font = font_size
+        self.large_font = 50
+        self.font = pygame.font.SysFont(None, self.small_font)
 
         self.text = self.font.render(
             f"{self.text_message}", True, self.text_color)
@@ -39,6 +42,10 @@ class Text_Displayer:
     def realign_position(self):
         self.text = self.font.render(
             f"{self.text_message}", True, self.text_color)
+        if self.text.get_width() > Window.current.screen.get_width():
+            self.font = pygame.font.SysFont(None, self.small_font)
+            self.text = self.font.render(
+                f"{self.text_message}", True, self.text_color)
         pivot_x = self.text.get_width() // 2
         pivot_y = self.text.get_height() // 2
         self.position = Vector2(

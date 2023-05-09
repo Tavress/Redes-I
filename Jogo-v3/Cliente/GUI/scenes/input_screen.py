@@ -2,6 +2,7 @@ import pygame
 from pygame import Vector2
 from GUI.Button import Button
 from GUI.Input_Field import Input_Field
+from GUI.Text_Displayer import Text_Displayer
 
 from GUI.Window import Window
 
@@ -41,6 +42,14 @@ def submit():
 
 def get_values(screen_width, screen_height):
     global is_running
+    game_title_text = Text_Displayer(
+        Window.current.screen,
+        Vector2(screen_width // 2, screen_height // 2 - 100),
+        [100, 100],
+        None,
+        "Jogo da Memória",
+        (255, 255, 255),
+        50)
     input_server = Input_Field(
         Window.current.screen,
         Vector2(200, 20),
@@ -73,6 +82,7 @@ def get_values(screen_width, screen_height):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 is_running = False
+                return "disconnected"
             elif event.type == pygame.MOUSEBUTTONUP:
                 do_on_click_left_events(inputs, buttons, event)
             elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -90,5 +100,6 @@ def get_values(screen_width, screen_height):
         for inp in inputs:
             inp.draw()
         submit_button.draw()
+        game_title_text.draw()
         pygame.display.update()
     return [input_server.inputed_text, input_port.inputed_text]

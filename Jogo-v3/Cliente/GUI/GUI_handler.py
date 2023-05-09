@@ -1,39 +1,38 @@
+import sys
 import threading
 import pygame
-import GUI.scenes.input_screen
-import GUI.scenes.game_screen
+from GUI.scenes import input_screen, game_screen
 from GUI.Window import Window
-from main import get_matrix
 
-screen_width = 1280
-screen_height = 960
+screen_width = 600
+screen_height = 600
 is_running = True
 lock = threading.RLock()
-input_window = None
+game_window = None
 
 
 def start(title):
-    global input_window
+    global game_window
+    if game_window is not None:
+        return
     pygame.init()
-    input_window = Window((screen_width, screen_height), title)
+    game_window = Window((screen_width, screen_height), title)
 
 
 def quit():
+    global game_window
+    game_window = None
     pygame.quit()
 
 
 def get_ip_and_port() -> tuple[str, int]:
-    server, port = GUI.scenes.input_screen.get_values(
-        screen_width, screen_height)
-    return (server, int(port))
+    try:
+        server, port = input_screen.get_values(
+            screen_width, screen_height)
+        return (server, int(port))
+    except:
+        sys.exit()
 
 
-def show_cards(matrix) -> str:
-    global input_window
-    result = GUI.scenes.game_screen.get_GUI_inputs(matrix, True)
-    if result is None:
-        return ""
-    return f"{result[0]} {result[1]}"
-
-
-def get_GUI_inputs(is_my_turn: bool) -> tuple[int, int]:
+def get_GUI_inputs(is_my_turn: bool, get_matrix) -> tuple[int, int]:
+    return game_screen.get_GUI_inputs(is_my_turn, get_matrix)
